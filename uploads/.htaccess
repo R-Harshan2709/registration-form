@@ -1,0 +1,10 @@
+# Security for uploads directory
+Options -Indexes
+<Files ~ "\.(php|phtml|php3|php4|php5|pl|py|jsp|asp|sh|cgi)$">
+    Order Allow,Deny
+    Deny from all
+</Files>
+<Files ~ "\.(jpg|jpeg|png|gif|webp)$">
+    Order Allow,Deny
+    Allow from all
+</Files>

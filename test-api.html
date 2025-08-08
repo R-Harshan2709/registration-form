@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        #results {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            white-space: pre-wrap;
+        }
+        .success { color: #4ecdc4; }
+        .error { color: #ff6b6b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Registration API Test</h1>
+        <p>This will test the exact same API call that the React form makes.</p>
+        
+        <button onclick="testAPI()">🧪 Test API Connection</button>
+        <button onclick="testWithFile()">📸 Test with File Upload</button>
+        <button onclick="clearResults()">🧹 Clear Results</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost/registration-form/backend/register.php';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : '';
+            results.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testAPI() {
+            log('🔄 Starting API test...');
+            
+            try {
+                // Create FormData exactly like the react form does
+                const formData = new FormData();
+                formData.append('name', 'Test User');
+                formData.append('email', 'test@example.com');
+                formData.append('password', 'password123');
+                formData.append('phone', '+1234567890');
+                formData.append('date_of_birth', '1990-01-01');
+                formData.append('gender', 'Male');
+                formData.append('address', '123 Test St');
+                formData.append('city', 'Test City');
+                formData.append('state', 'Test State');
+                formData.append('postal_code', '12345');
+                formData.append('country', 'Test Country');
+                formData.append('occupation', 'Tester');
+                formData.append('company', 'Test Company');
+                formData.append('website', 'https://test.com');
+                formData.append('emergency_contact_name', 'Emergency Contact');
+                formData.append('emergency_contact_phone', '+0987654321');
+                formData.append('newsletter_subscription', 'true');
+                formData.append('terms_accepted', 'true');
+                
+                log('📤 Sending POST request to: ' + API_URL);
+                
+                const response = await axios.post(API_URL, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    timeout: 15000
+                });
+                
+                log('✅ SUCCESS! Response received:', 'success');
+                log(JSON.stringify(response.data, null, 2), 'success');
+                
+            } catch (error) {
+                log('❌ ERROR occurred!', 'error');
+                
+                if (error.code === 'ECONNABORTED') {
+                    log('⏰ Request timeout', 'error');
+                } else if (error.response) {
+                    log(`🔴 Server responded with status: ${error.response.status}`, 'error');
+                    log(`📝 Response data: ${JSON.stringify(error.response.data, null, 2)}`, 'error');
+                } else if (error.request) {
+                    log('🌐 Network error - no response received from server', 'error');
+                    log('📡 This usually means XAMPP is not running or there\'s a connection issue', 'error');
+                } else {
+                    log(`⚠️ Other error: ${error.message}`, 'error');
+                }
+                
+                log(`🔍 Full error details: ${JSON.stringify(error, null, 2)}`, 'error');
+            }
+        }
+        
+        async function testWithFile() {
+            log('🔄 Starting API test with file upload...');
+            
+            try {
+                // Create a small test file
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#4ecdc4';
+                ctx.fillRect(0, 0, 100, 100);
+                ctx.fillStyle = 'white';
+                ctx.font = '20px Arial';
+                ctx.fillText('TEST', 25, 55);
+                
+                canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('name', 'Test User with Photo');
+                    formData.append('email', 'testphoto@example.com');
+                    formData.append('password', 'password123');
+                    formData.append('phone', '+1234567890');
+                    formData.append('date_of_birth', '1990-01-01');
+                    formData.append('gender', 'Female');
+                    formData.append('address', '123 Test St');
+                    formData.append('city', 'Test City');
+                    formData.append('state', 'Test State');
+                    formData.append('postal_code', '12345');
+                    formData.append('country', 'Test Country');
+                    formData.append('occupation', 'Tester');
+                    formData.append('company', 'Test Company');
+                    formData.append('website', 'https://test.com');
+                    formData.append('emergency_contact_name', 'Emergency Contact');
+                    formData.append('emergency_contact_phone', '+0987654321');
+                    formData.append('newsletter_subscription', 'true');
+                    formData.append('terms_accepted', 'true');
+                    formData.append('profile_photo', blob, 'test-photo.png');
+                    
+                    log('📤 Sending POST request with file to: ' + API_URL);
+                    
+                    const response = await axios.post(API_URL, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        timeout: 15000
+                    });
+                    
+                    log('✅ SUCCESS with file! Response received:', 'success');
+                    log(JSON.stringify(response.data, null, 2), 'success');
+                    
+                }, 'image/png');
+                
+            } catch (error) {
+                log('❌ ERROR with file upload!', 'error');
+                
+                if (error.code === 'ECONNABORTED') {
+                    log('⏰ Request timeout', 'error');
+                } else if (error.response) {
+                    log(`🔴 Server responded with status: ${error.response.status}`, 'error');
+                    log(`📝 Response data: ${JSON.stringify(error.response.data, null, 2)}`, 'error');
+                } else if (error.request) {
+                    log('🌐 Network error - no response received from server', 'error');
+                    log('📡 This usually means XAMPP is not running or there\'s a connection issue', 'error');
+                } else {
+                    log(`⚠️ Other error: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        // Auto-run basic test on page load
+        window.onload = function() {
+            log('🎯 API Test Page Loaded');
+            log('📍 Testing endpoint: ' + API_URL);
+            log('🔧 Click "Test API Connection" to simulate form submission');
+        };
+    </script>
+</body>
+</html>

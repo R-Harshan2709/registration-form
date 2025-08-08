@@ -1,0 +1,447 @@
+/* Premium Registration System - Ultra Modern CSS */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+  background: #0a0a0a;
+}
+
+.App {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Floating Particles Animation */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Advanced Background Animations */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rainbow {
+  0% { filter: hue-rotate(0deg); }
+  25% { filter: hue-rotate(90deg); }
+  50% { filter: hue-rotate(180deg); }
+  75% { filter: hue-rotate(270deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(74, 144, 226, 0.6);
+  }
+}
+
+/* Form Animations */
+.form-container {
+  animation: fadeInScale 1s ease-out;
+}
+
+.input-group {
+  animation: slideInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.input-group:nth-child(1) { animation-delay: 0.1s; }
+.input-group:nth-child(2) { animation-delay: 0.2s; }
+.input-group:nth-child(3) { animation-delay: 0.3s; }
+.input-group:nth-child(4) { animation-delay: 0.4s; }
+
+.row .input-group:nth-child(odd) {
+  animation: slideInLeft 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+.row .input-group:nth-child(even) {
+  animation: slideInRight 0.8s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+/* Input Enhancement Effects */
+input:focus,
+select:focus,
+textarea:focus {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Button Effects */
+.submit-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.submit-button:hover::before {
+  left: 100%;
+}
+
+.submit-button:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(74, 144, 226, 0.8);
+  animation: rainbow 3s ease-in-out infinite;
+}
+
+.submit-button:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* Photo Section Effects */
+.photo-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(74, 144, 226, 0.1),
+    transparent
+  );
+  animation: spin 8s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.photo-section:hover::before {
+  opacity: 1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Success/Error Message Animations */
+.message {
+  animation: slideInUp 0.5s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 1200px) {
+  .form-container {
+    margin: 20px;
+    padding: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    margin: 10px;
+    padding: 30px 20px;
+  }
+  
+  .title {
+    font-size: 2.5rem !important;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem !important;
+  }
+  
+  .row {
+    flex-direction: column !important;
+  }
+  
+  .input-group {
+    min-width: 100% !important;
+    margin-bottom: 20px;
+  }
+  
+  .photo-preview {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  
+  .submit-button {
+    font-size: 16px !important;
+    padding: 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    margin: 5px;
+    padding: 20px 15px;
+  }
+  
+  .title {
+    font-size: 2rem !important;
+    letter-spacing: 1px !important;
+  }
+  
+  .section-title {
+    font-size: 1.3rem !important;
+  }
+  
+  .photo-section {
+    padding: 30px 20px !important;
+  }
+  
+  .photo-button,
+  .remove-button {
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* Advanced Visual Effects */
+.glass-effect {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.neon-glow {
+  box-shadow: 
+    0 0 5px rgba(74, 144, 226, 0.5),
+    inset 0 0 5px rgba(74, 144, 226, 0.2);
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #4a90e2, #8e44ad, #1abc9c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading States */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+/* Enhanced Interaction States */
+input:hover,
+select:hover,
+textarea:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 0 4px rgba(74, 144, 226, 0.1),
+    0 8px 25px rgba(74, 144, 226, 0.15);
+}
+
+/* Advanced Button Styles */
+button {
+  position: relative;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4a90e2, #8e44ad);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #357abd, #7d3c98);
+  background-clip: content-box;
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(74, 144, 226, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(74, 144, 226, 0.3);
+  color: white;
+}

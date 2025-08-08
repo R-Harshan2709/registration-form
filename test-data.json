@@ -1,0 +1,20 @@
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "phone": "+1234567890",
+  "date_of_birth": "1990-01-15",
+  "gender": "male",
+  "address": "123 Main Street",
+  "city": "New York",
+  "state": "NY",
+  "postal_code": "10001",
+  "country": "United States",
+  "occupation": "Software Developer",
+  "company": "Tech Corp",
+  "website": "https://johndoe.com",
+  "emergency_contact_name": "Jane Doe",
+  "emergency_contact_phone": "+1234567891",
+  "newsletter_subscription": true,
+  "terms_accepted": true
+}

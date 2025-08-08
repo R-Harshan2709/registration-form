@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Network Diagnostic Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        #results {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .success { color: #4ecdc4; }
+        .error { color: #ff6b6b; }
+        .warning { color: #f39c12; }
+        .info { color: #3498db; }
+        h1 { text-align: center; margin-bottom: 30px; }
+        .test-section { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Registration Network Diagnostic</h1>
+        <p>This will help identify exactly why you're getting "Network error"</p>
+        
+        <div class="test-section">
+            <h3>🧪 Quick Tests:</h3>
+            <button onclick="testBasicConnection()">🌐 Test Basic Connection</button>
+            <button onclick="testCORS()">🔄 Test CORS</button>
+            <button onclick="testFormSubmission()">📝 Test Form Submission</button>
+            <button onclick="testWithFile()">📸 Test with File</button>
+            <button onclick="clearResults()">🧹 Clear Results</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost/registration-form/backend/register_new.php';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+            results.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testBasicConnection() {
+            log('🔍 TESTING BASIC CONNECTION...', 'info');
+            log('📍 Endpoint: ' + API_URL, 'info');
+            
+            try {
+                // Test basic fetch
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                const text = await response.text();
+                log('✅ Basic connection successful!', 'success');
+                log('📊 Status: ' + response.status, 'info');
+                log('📝 Response: ' + text, 'info');
+                
+            } catch (error) {
+                log('❌ Basic connection FAILED!', 'error');
+                log('💥 Error: ' + error.message, 'error');
+                log('🔍 Error type: ' + error.name, 'error');
+                
+                if (error.message.includes('CORS')) {
+                    log('🚨 CORS issue detected!', 'warning');
+                }
+                if (error.message.includes('network')) {
+                    log('🌐 Network connectivity issue!', 'warning');
+                }
+            }
+        }
+        
+        async function testCORS() {
+            log('🔄 TESTING CORS CONFIGURATION...', 'info');
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': 'http://localhost:3000',
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+                
+                log('✅ CORS preflight successful!', 'success');
+                log('📊 Status: ' + response.status, 'info');
+                
+                // Check CORS headers
+                const corsOrigin = response.headers.get('Access-Control-Allow-Origin');
+                const corsMethods = response.headers.get('Access-Control-Allow-Methods');
+                const corsHeaders = response.headers.get('Access-Control-Allow-Headers');
+                
+                log('🌐 Allow-Origin: ' + corsOrigin, 'info');
+                log('📝 Allow-Methods: ' + corsMethods, 'info');
+                log('📋 Allow-Headers: ' + corsHeaders, 'info');
+                
+            } catch (error) {
+                log('❌ CORS test FAILED!', 'error');
+                log('💥 Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function testFormSubmission() {
+            log('📝 TESTING FORM SUBMISSION (like React app)...', 'info');
+            
+            try {
+                // Create FormData exactly like React does
+                const formData = new FormData();
+                formData.append('name', 'Test User');
+                formData.append('email', 'diagnostic@test.com');
+                formData.append('password', 'password123');
+                formData.append('phone', '+1234567890');
+                formData.append('date_of_birth', '1990-01-01');
+                formData.append('gender', 'male');
+                formData.append('address', '123 Test St');
+                formData.append('city', 'Test City');
+                formData.append('state', 'Test State');
+                formData.append('postal_code', '12345');
+                formData.append('country', 'Test Country');
+                formData.append('occupation', 'Tester');
+                formData.append('company', 'Test Company');
+                formData.append('website', 'https://test.com');
+                formData.append('emergency_contact_name', 'Emergency');
+                formData.append('emergency_contact_phone', '+0987654321');
+                formData.append('newsletter_subscription', 'true');
+                formData.append('terms_accepted', 'true');
+                
+                log('📤 Sending multipart/form-data request...', 'info');
+                
+                const response = await axios.post(API_URL, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    timeout: 15000
+                });
+                
+                log('🎉 FORM SUBMISSION SUCCESSFUL!', 'success');
+                log('📊 Status: ' + response.status, 'success');
+                log('📝 Response: ' + JSON.stringify(response.data, null, 2), 'success');
+                
+            } catch (error) {
+                log('❌ FORM SUBMISSION FAILED!', 'error');
+                log('🔍 Error type: ' + error.constructor.name, 'error');
+                
+                if (error.code === 'ECONNABORTED') {
+                    log('⏰ REQUEST TIMEOUT!', 'error');
+                    log('💡 Possible causes: XAMPP not running, firewall, or slow connection', 'warning');
+                } else if (error.response) {
+                    log('🔴 Server responded with error', 'error');
+                    log('📊 Status: ' + error.response.status, 'error');
+                    log('📝 Response: ' + JSON.stringify(error.response.data, null, 2), 'error');
+                } else if (error.request) {
+                    log('🌐 NO RESPONSE FROM SERVER!', 'error');
+                    log('💡 This is the exact error you\'re seeing in React!', 'warning');
+                    log('🔧 Possible fixes:', 'warning');
+                    log('   1. Check if XAMPP Apache is running', 'warning');
+                    log('   2. Check if port 80 is available', 'warning');
+                    log('   3. Try restarting XAMPP', 'warning');
+                    log('   4. Check Windows Firewall', 'warning');
+                } else {
+                    log('⚠️ Other error: ' + error.message, 'error');
+                }
+                
+                log('🔍 Full error details:', 'error');
+                log(JSON.stringify({
+                    message: error.message,
+                    code: error.code,
+                    config: error.config ? {
+                        url: error.config.url,
+                        method: error.config.method,
+                        timeout: error.config.timeout
+                    } : 'No config'
+                }, null, 2), 'error');
+            }
+        }
+        
+        async function testWithFile() {
+            log('📸 TESTING WITH FILE UPLOAD...', 'info');
+            
+            try {
+                // Create a test image
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#4ecdc4';
+                ctx.fillRect(0, 0, 100, 100);
+                ctx.fillStyle = 'white';
+                ctx.font = '16px Arial';
+                ctx.fillText('TEST', 30, 55);
+                
+                canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('name', 'Test User with Photo');
+                    formData.append('email', 'photo-test@example.com');
+                    formData.append('password', 'password123');
+                    formData.append('phone', '+1234567890');
+                    formData.append('profile_photo', blob, 'test.png');
+                    
+                    log('📤 Sending request with file...', 'info');
+                    
+                    const response = await axios.post(API_URL, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        timeout: 15000
+                    });
+                    
+                    log('🎉 FILE UPLOAD SUCCESSFUL!', 'success');
+                    log('📝 Response: ' + JSON.stringify(response.data, null, 2), 'success');
+                    
+                }, 'image/png');
+                
+            } catch (error) {
+                log('❌ FILE UPLOAD FAILED!', 'error');
+                log('💥 Error: ' + error.message, 'error');
+            }
+        }
+        
+        // Auto-run basic test on page load
+        window.onload = function() {
+            log('🎯 Network Diagnostic Tool Loaded', 'info');
+            log('🏗️ This will help identify your "Network error" issue', 'info');
+            log('👆 Click "Test Basic Connection" to start diagnosis', 'info');
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>React Origin Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Testing from React's Origin (port 3000)</h1>
+    <button id="testBtn">Test Registration API</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('testBtn').onclick = async function() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Testing...';
+            
+            try {
+                const formData = new FormData();
+                formData.append('name', 'React Origin Test');
+                formData.append('email', 'react-origin@test.com');
+                formData.append('password', 'password123');
+                formData.append('phone', '+1234567890');
+                
+                const response = await axios.post(
+                    'http://localhost/registration-form/backend/register_new.php',
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        timeout: 15000
+                    }
+                );
+                
+                result.innerHTML = '<div style="color: green;">SUCCESS: ' + JSON.stringify(response.data) + '</div>';
+                
+            } catch (error) {
+                let errorMsg = 'ERROR: ';
+                if (error.code === 'ECONNABORTED') {
+                    errorMsg += 'Request timeout';
+                } else if (error.response) {
+                    errorMsg += 'Server error: ' + error.response.status + ' - ' + JSON.stringify(error.response.data);
+                } else if (error.request) {
+                    errorMsg += 'Network error - no response received (THIS IS YOUR ISSUE!)';
+                } else {
+                    errorMsg += error.message;
+                }
+                result.innerHTML = '<div style="color: red;">' + errorMsg + '</div>';
+                console.error('Full error:', error);
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Express + MongoDB Backend Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        #results {
+            margin-top: 20px;
+            padding: 25px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .success { color: #4ecdc4; }
+        .error { color: #ff6b6b; }
+        .warning { color: #f39c12; }
+        .info { color: #3498db; }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-size: 2.5em;
+        }
+        .status-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #4ecdc4;
+        }
+        .tech-stack {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .tech-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            flex: 1;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Express.js + File Database Backend</h1>
+        
+        <div class="status-card">
+            <h3>🏗️ Tech Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h4>⚡ Frontend</h4>
+                    <p>React 18.2.0<br>Axios<br>Modern UI</p>
+                </div>
+                <div class="tech-item">
+                    <h4>🚀 Backend</h4>
+                    <p>Express.js<br>Node.js<br>File Database</p>
+                </div>
+                <div class="tech-item">
+                    <h4>🗄️ Storage</h4>
+                    <p>JSON Files<br>bcrypt Encryption<br>File Uploads</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status-card">
+            <h3>🧪 API Tests</h3>
+            <button onclick="testHealth()">🏥 Health Check</button>
+            <button onclick="testRegistration()">📝 Test Registration</button>
+            <button onclick="testWithPhoto()">📸 Test Photo Upload</button>
+            <button onclick="getUsers()">👥 Get Users</button>
+            <button onclick="getStats()">📊 Get Statistics</button>
+            <button onclick="clearResults()">🧹 Clear</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+            results.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testHealth() {
+            log('🏥 Testing health endpoint...', 'info');
+            try {
+                const response = await axios.get(`${API_BASE}/health`);
+                log('✅ Health check successful!', 'success');
+                log(`📊 Response: ${JSON.stringify(response.data, null, 2)}`, 'success');
+            } catch (error) {
+                log('❌ Health check failed!', 'error');
+                log(`💥 Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testRegistration() {
+            log('📝 Testing user registration...', 'info');
+            
+            const testUser = {
+                name: 'Express Test User ' + Date.now(),
+                email: `express-test-${Date.now()}@example.com`,
+                password: 'securepassword123',
+                phone: '+1234567890',
+                date_of_birth: '1990-05-15',
+                gender: 'male',
+                address: '123 Express Street',
+                city: 'Node City',
+                state: 'JavaScript State',
+                postal_code: '12345',
+                country: 'MongoDB Country',
+                occupation: 'Developer',
+                company: 'Express Corp',
+                website: 'https://expressjs.com',
+                emergency_contact_name: 'Emergency Contact',
+                emergency_contact_phone: '+0987654321',
+                newsletter_subscription: true,
+                terms_accepted: true
+            };
+            
+            try {
+                const formData = new FormData();
+                Object.keys(testUser).forEach(key => {
+                    formData.append(key, testUser[key]);
+                });
+                
+                const response = await axios.post(`${API_BASE}/users/register`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                
+                log('🎉 Registration successful!', 'success');
+                log(`📋 User created: ${JSON.stringify(response.data, null, 2)}`, 'success');
+                
+            } catch (error) {
+                log('❌ Registration failed!', 'error');
+                if (error.response) {
+                    log(`📊 Status: ${error.response.status}`, 'error');
+                    log(`📝 Response: ${JSON.stringify(error.response.data, null, 2)}`, 'error');
+                } else {
+                    log(`💥 Error: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        async function testWithPhoto() {
+            log('📸 Testing registration with photo upload...', 'info');
+            
+            try {
+                // Create a test image
+                const canvas = document.createElement('canvas');
+                canvas.width = 200;
+                canvas.height = 200;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw a colorful test image
+                const gradient = ctx.createLinearGradient(0, 0, 200, 200);
+                gradient.addColorStop(0, '#667eea');
+                gradient.addColorStop(1, '#764ba2');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 200, 200);
+                
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('EXPRESS', 100, 80);
+                ctx.fillText('TEST', 100, 120);
+                ctx.fillText('PHOTO', 100, 160);
+                
+                canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('name', 'Photo Test User ' + Date.now());
+                    formData.append('email', `photo-test-${Date.now()}@example.com`);
+                    formData.append('password', 'phototest123');
+                    formData.append('phone', '+1555000999');
+                    formData.append('gender', 'female');
+                    formData.append('city', 'Photo City');
+                    formData.append('terms_accepted', 'true');
+                    formData.append('profile_photo', blob, 'test-photo.png');
+                    
+                    const response = await axios.post(`${API_BASE}/users/register`, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+                    
+                    log('📸 Photo upload successful!', 'success');
+                    log(`🖼️ User with photo: ${JSON.stringify(response.data, null, 2)}`, 'success');
+                    
+                }, 'image/png');
+                
+            } catch (error) {
+                log('❌ Photo upload failed!', 'error');
+                log(`💥 Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function getUsers() {
+            log('👥 Getting all users...', 'info');
+            try {
+                const response = await axios.get(`${API_BASE}/users`);
+                log('✅ Users retrieved successfully!', 'success');
+                log(`📋 Users data: ${JSON.stringify(response.data, null, 2)}`, 'info');
+            } catch (error) {
+                log('❌ Failed to get users!', 'error');
+                log(`💥 Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function getStats() {
+            log('📊 Getting statistics...', 'info');
+            try {
+                const response = await axios.get(`${API_BASE}/users/stats/summary`);
+                log('✅ Statistics retrieved successfully!', 'success');
+                log(`📈 Stats: ${JSON.stringify(response.data, null, 2)}`, 'success');
+            } catch (error) {
+                log('❌ Failed to get statistics!', 'error');
+                log(`💥 Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Auto-run health check on page load
+        window.onload = function() {
+            log('🎯 Express.js Backend Test Page Loaded', 'info');
+            log('🚀 Backend: http://localhost:5000', 'info');
+            log('⚛️ Frontend: http://localhost:3000', 'info');
+            log('📋 File Database: JSON storage', 'info');
+            log('👆 Click buttons above to test the API!', 'info');
+            
+            // Auto-run health check
+            setTimeout(testHealth, 1000);
+        };
+    </script>
+</body>
+</html>
